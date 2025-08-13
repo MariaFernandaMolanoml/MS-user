@@ -1,7 +1,9 @@
 package com.example.foodCourt.domain.exception;
 
 public class DocumentAlreadyExistsException extends RuntimeException {
-    public DocumentAlreadyExistsException(String message) {
-        super(message);
+    private static final String DEFAULT_MESSAGE = "El documento ya está registrado";
+
+    public DocumentAlreadyExistsException() {
+        super(DEFAULT_MESSAGE);
     }
 }

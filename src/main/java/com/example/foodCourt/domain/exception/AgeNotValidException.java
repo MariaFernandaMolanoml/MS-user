@@ -1,7 +1,9 @@
 package com.example.foodCourt.domain.exception;
 
 public class AgeNotValidException extends RuntimeException {
-    public AgeNotValidException(String message) {
-        super(message);
+    private static final String DEFAULT_MESSAGE = "El usuario debe ser mayor de edad";
+
+    public AgeNotValidException() {
+        super(DEFAULT_MESSAGE);
     }
 }

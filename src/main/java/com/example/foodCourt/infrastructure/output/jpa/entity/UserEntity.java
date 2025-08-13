@@ -1,4 +1,5 @@
 package com.example.foodCourt.infrastructure.output.jpa.entity;
+import com.example.foodCourt.domain.model.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +9,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-@Table(name ="user")
+@Table(name ="users")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -21,15 +22,18 @@ public class UserEntity {
     @Column (nullable = false)
     private String name;
     @Column(nullable = false)
+    private String lastName;
+    @Column(nullable = false)
     private String phone;
     @Column(nullable = false)
-    private LocalDate birthday;
+    private LocalDate birthDate;
+    @Column(nullable = false)
+    private String document;
     @Column(nullable = false)
     private String password;
     @Column(nullable = false)
     private String email;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "roleId", nullable = false)
+    @JoinColumn(name = "role_id", nullable = false)
     private RoleEntity roleEntity;
 }
-

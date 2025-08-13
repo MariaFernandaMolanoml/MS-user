@@ -1,34 +1,30 @@
 package com.example.foodCourt.infrastructure.output.jpa.adapter;
 
-import com.example.foodCourt.domain.api.IUserServicePort;
-import com.example.foodCourt.domain.model.User;
-import com.example.foodCourt.domain.spi.IUserPersistencePort;
-import com.example.foodCourt.infrastructure.output.jpa.mapper.UserEntityMapper;
-import com.example.foodCourt.infrastructure.output.jpa.repository.IUserRepository;
+import com.example.foodCourt.domain.exception.RoleNotFoundException;
+import com.example.foodCourt.domain.model.Role;
+import com.example.foodCourt.domain.spi.IRolePersistencePort;
+import com.example.foodCourt.infrastructure.output.jpa.entity.RoleEntity;
+import com.example.foodCourt.infrastructure.output.jpa.mapper.RoleEntityMapper;
+import com.example.foodCourt.infrastructure.output.jpa.repository.IRoleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
-public class RoleJpaAdapter implements IUserPersistencePort {
-    private final IUserRepository userRepository;
-    private final UserEntityMapper userEntityMapper;
+public class RoleJpaAdapter implements IRolePersistencePort {
+
+    private final IRoleRepository roleRepository;
+    private final RoleEntityMapper roleEntityMapper;
 
     @Override
-    public User saveUser(User user) {
-        return null;
+    public Boolean existsById(Long roleId) {
+        return roleRepository.existsById(roleId);
     }
 
     @Override
-    public Boolean existsByDocument(String document) {
-        return null;
-    }
-
-    @Override
-    public Boolean existsByEmail(String email) {
-        return null;
-    }
-
-    @Override
-    public User findByDocument(String document) {
-        return null;
+    public Role findByName(String name) {
+        return roleRepository.findByNameIgnoreCase(name)
+                .map(roleEntityMapper::toRole)
+                .orElseThrow(RoleNotFoundException::new);
     }
 }

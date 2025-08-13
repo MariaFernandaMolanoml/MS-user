@@ -1,7 +1,9 @@
 package com.example.foodCourt.domain.exception;
 
 public class UserNotFoundException extends RuntimeException {
-    public UserNotFoundException(String message) {
-        super(message);
+    private static final String DEFAULT_MESSAGE = "El usuario no fue encontrado";
+
+    public UserNotFoundException() {
+        super(DEFAULT_MESSAGE);
     }
 }
