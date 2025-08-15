@@ -80,4 +80,8 @@ public class UserUseCase implements IUserServicePort {
             throw new AgeNotValidException();
         }
     }
+
+    public User getUserById(Long id) {
+        return userPersistencePort.findById(id);
+    }
 }
