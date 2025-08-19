@@ -45,7 +45,7 @@ public class UserUseCase implements IUserServicePort {
     }
 
     @Override
-    public User getUser(String document) {
+    public User getUserByDocument(String document) {
         User user = userPersistencePort.findByDocument(document);
         if (user == null) {
             throw new UserNotFoundException();
@@ -79,9 +79,5 @@ public class UserUseCase implements IUserServicePort {
         if (age < 18) {
             throw new AgeNotValidException();
         }
-    }
-
-    public User getUserById(Long id) {
-        return userPersistencePort.findById(id);
     }
 }

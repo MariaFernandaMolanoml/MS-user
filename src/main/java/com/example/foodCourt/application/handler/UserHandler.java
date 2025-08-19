@@ -1,7 +1,9 @@
 package com.example.foodCourt.application.handler;
 
 import com.example.foodCourt.application.dto.SaveDtoRequest;
+import com.example.foodCourt.application.dto.UserResponse;
 import com.example.foodCourt.application.mapper.SaveDtoRequestMapper;
+import com.example.foodCourt.application.mapper.UserResponseMapper;
 import com.example.foodCourt.domain.api.IUserServicePort;
 import com.example.foodCourt.domain.model.User;
 import com.example.foodCourt.domain.usecase.UserUseCase;
@@ -16,15 +18,17 @@ public class UserHandler implements IUserHandler{
 
     private final IUserServicePort userServicePort;
     private final SaveDtoRequestMapper saveDtoRequestMapper;
+    private final UserResponseMapper userResponseMapper;
     private final UserUseCase userUseCase;
 
     @Override
-    public User saveOwner(SaveDtoRequest saveDtoRequest) {
+    public void saveOwner(SaveDtoRequest saveDtoRequest) {
         User user = saveDtoRequestMapper.toEntity(saveDtoRequest);
-        return userServicePort.saveOwner(user);
+        userServicePort.saveOwner(user);
     }
     @Override
-    public User getUserById(Long id) {
-        return userUseCase.getUserById(id);
+    public UserResponse getUserByDocument(String document) {
+        User user = userServicePort.getUserByDocument(document);
+        return userResponseMapper.toResponse(user);
     }
 }

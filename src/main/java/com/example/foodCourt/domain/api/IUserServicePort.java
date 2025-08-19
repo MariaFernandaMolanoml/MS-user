@@ -3,5 +3,5 @@ import com.example.foodCourt.domain.model.User;
 
 public interface IUserServicePort {
     User saveOwner(User user);
-    User getUser (String document);
+    User getUserByDocument (String document);
 }

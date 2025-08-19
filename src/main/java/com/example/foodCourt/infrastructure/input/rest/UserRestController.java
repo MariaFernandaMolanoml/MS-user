@@ -2,6 +2,7 @@ package com.example.foodCourt.infrastructure.input.rest;
 
 
 import com.example.foodCourt.application.dto.SaveDtoRequest;
+import com.example.foodCourt.application.dto.UserResponse;
 import com.example.foodCourt.application.handler.IUserHandler;
 import com.example.foodCourt.domain.model.User;
 import jakarta.validation.Valid;
@@ -22,8 +23,9 @@ public class UserRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        return ResponseEntity.ok(userHandler.getUserById(id));
+    @GetMapping("/{document}")
+    public ResponseEntity<UserResponse> getUserByDocument(@PathVariable String document) {
+        return ResponseEntity.ok(userHandler.getUserByDocument(document));
     }
+
 }

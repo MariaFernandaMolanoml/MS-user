@@ -41,3 +41,4 @@ public class BeanConfiguration {
         return new UserUseCase(userPersistencePort(), encryptPasswordPersistencePort, rolePersistencePort());
     }
 }
+
