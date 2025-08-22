@@ -8,6 +8,8 @@ import com.example.foodCourt.infrastructure.output.jpa.mapper.UserEntityMapper;
 import com.example.foodCourt.infrastructure.output.jpa.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 public class UserJpaAdapter implements IUserPersistencePort {
 
@@ -39,5 +41,10 @@ public class UserJpaAdapter implements IUserPersistencePort {
     @Override
     public User findById(Long id) {
         return userEntityMapper.toUser(userRepository.findById(id).orElse(null));
+    }
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .map(userEntityMapper::toUser);
     }
 }

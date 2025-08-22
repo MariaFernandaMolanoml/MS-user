@@ -15,5 +15,20 @@ public class User {
     private LocalDate birthDate;
     private Role role;
 
-}
+    public User(Long id, String name, String lastName, String document, String email, String phone, String password, Role role) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.document = document;
+        this.email = email;
+        this.phone = phone;
+        this.password = password;
+        this.role = role;
+    }
 
+    public User() {}
+
+    public boolean passwordMatches(String rawPassword, org.springframework.security.crypto.password.PasswordEncoder encoder) {
+        return encoder.matches(rawPassword, this.password);
+    }
+}

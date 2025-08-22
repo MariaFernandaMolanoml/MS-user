@@ -1,5 +1,7 @@
 package com.example.foodCourt.domain.spi;
+
 import com.example.foodCourt.domain.model.User;
+import java.util.Optional;
 
 
 public interface IUserPersistencePort {
@@ -8,4 +10,5 @@ public interface IUserPersistencePort {
     Boolean existsByEmail(String email);
     User findByDocument(String document);
     User findById(Long id);
+    Optional<User> findByEmail(String email);
 }
