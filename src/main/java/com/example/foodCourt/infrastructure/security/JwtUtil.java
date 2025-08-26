@@ -6,7 +6,10 @@ import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.Date;
+
+import static com.example.foodCourt.domain.constants.Constants.*;
 
 @Component
 public class JwtUtil {
@@ -17,10 +20,12 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private long EXPIRATION_MS;
 
-    public String generateToken(String email, String role) {
+    public String generateToken(String email, String role, String document, LocalDate birthDate) {
         return Jwts.builder()
                 .setSubject(email)
-                .claim("role", role)
+                .claim(ROLE, role)
+                .claim(DOCUMENT, document)
+                .claim(BIRTHDATE, birthDate.toString())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_MS))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
@@ -32,7 +37,15 @@ public class JwtUtil {
     }
 
     public String getRoleFromToken(String token) {
-        return getClaims(token).get("role", String.class);
+        return getClaims(token).get(ROLE, String.class);
+    }
+
+    public String getDocumentFromToken(String token) {
+        return getClaims(token).get(DOCUMENT, String.class);
+    }
+
+    public String getBirthDateFromToken(String token) {
+        return getClaims(token).get(BIRTHDATE, String.class);
     }
 
     public boolean isTokenValid(String token) {

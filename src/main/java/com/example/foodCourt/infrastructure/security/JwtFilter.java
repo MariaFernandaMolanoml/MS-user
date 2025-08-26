@@ -5,38 +5,55 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collections;
+
+import static com.example.foodCourt.domain.constants.Constants.*;
 
 @Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final com.example.foodCourt.application.security.JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
 
-        String authHeader = request.getHeader("Authorization");
+        String authHeader = request.getHeader(AUTHORIZATION);
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+        if (authHeader != null && authHeader.startsWith(BEARER)) {
             String token = authHeader.substring(7);
 
-            if (!jwtUtil.isTokenValid(token)) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("Token inválido o expirado");
-                return;
+            if (jwtUtil.isTokenValid(token)) {
+                String email = jwtUtil.getEmailFromToken(token);
+                String role = jwtUtil.getRoleFromToken(token);
+
+                request.setAttribute(EMAIL, email);
+                request.setAttribute(ROLE, role);
+                request.setAttribute(DOCUMENT, jwtUtil.getDocumentFromToken(token));
+                request.setAttribute(BIRTHDATE, jwtUtil.getBirthDateFromToken(token));
+
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(
+                                email,
+                                null,
+                                Collections.singletonList(new SimpleGrantedAuthority(role))
+                        );
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-
-            request.setAttribute("email", jwtUtil.getEmailFromToken(token));
-            request.setAttribute("role", jwtUtil.getRoleFromToken(token));
-
-        } else {
+        }
+        else if (authHeader != null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Falta token de autorización");
+            response.getWriter().write(INVALIDTOKEN);
             return;
         }
 
