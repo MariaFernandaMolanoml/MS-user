@@ -4,8 +4,7 @@ package com.example.foodCourt.infrastructure.input.rest;
 import com.example.foodCourt.application.dto.SaveDtoRequest;
 import com.example.foodCourt.application.dto.UserResponse;
 import com.example.foodCourt.application.handler.IUserHandler;
-import com.example.foodCourt.domain.model.User;
-import com.example.foodCourt.infrastructure.exception.ApiErrorResponse;
+import com.example.foodCourt.infrastructure.exception.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,10 +18,10 @@ public class UserRestController {
     private final IUserHandler userHandler;
 
     @PostMapping("/save/owner")
-    public ResponseEntity<ApiErrorResponse> register(@Valid @RequestBody SaveDtoRequest saveRequest) {
+    public ResponseEntity<ApiResponse> register(@Valid @RequestBody SaveDtoRequest saveRequest) {
         userHandler.saveOwner(saveRequest);
 
-        ApiErrorResponse response = new ApiErrorResponse(
+        ApiResponse response = new ApiResponse(
                 java.time.LocalDateTime.now(),
                 HttpStatus.CREATED.value(),
                 HttpStatus.CREATED.getReasonPhrase(),
@@ -37,4 +36,17 @@ public class UserRestController {
         return ResponseEntity.ok(userHandler.getUserByDocument(document));
     }
 
+    @PostMapping("/save/employee")
+    public ResponseEntity<ApiResponse> registerEmployee(@Valid @RequestBody SaveDtoRequest saveRequest) {
+        userHandler.saveEmployee(saveRequest);
+
+        ApiResponse response = new ApiResponse(
+                java.time.LocalDateTime.now(),
+                HttpStatus.CREATED.value(),
+                HttpStatus.CREATED.getReasonPhrase(),
+                "Employee created successfully"
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
 }

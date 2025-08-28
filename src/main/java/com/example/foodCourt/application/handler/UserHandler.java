@@ -31,4 +31,9 @@ public class UserHandler implements IUserHandler{
         User user = userServicePort.getUserByDocument(document);
         return userResponseMapper.toResponse(user);
     }
+    @Override
+    public void saveEmployee(SaveDtoRequest saveDtoRequest) {
+        User user = saveDtoRequestMapper.toEntity(saveDtoRequest);
+        userServicePort.saveEmployee(user);
+    }
 }

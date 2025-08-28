@@ -80,4 +80,20 @@ public class UserUseCase implements IUserServicePort {
             throw new AgeNotValidException();
         }
     }
+
+    @Override
+    public User saveEmployee(User user) {
+        validateEmailNotExists(user.getEmail());
+        validateDocumentNotExists(user.getDocument());
+
+        Role role = rolePersistencePort.findByName(Constants.ROLE_EMPLOYEE);
+        if (role == null) {
+            throw new RoleNotFoundException();
+        }
+
+        user.setRole(role);
+        user.setPassword(encryptPasswordPersistencePort.encryptPassword(user.getPassword()));
+
+        return userPersistencePort.saveUser(user);
+    }
 }
