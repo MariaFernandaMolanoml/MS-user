@@ -8,4 +8,5 @@ public interface IUserHandler {
     void saveOwner(SaveDtoRequest saveDtoRequest);
     UserResponse getUserByDocument(String document);
     void saveEmployee(@Valid SaveDtoRequest saveRequest);
+    void saveCustomer(@Valid SaveDtoRequest saveRequest);
 }

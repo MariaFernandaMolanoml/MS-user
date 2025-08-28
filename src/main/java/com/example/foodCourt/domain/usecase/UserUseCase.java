@@ -19,6 +19,7 @@ public class UserUseCase implements IUserServicePort {
     private final IRolePersistencePort rolePersistencePort;
 
 
+
     public UserUseCase(IUserPersistencePort userPersistencePort,
                        IEncryptPasswordPersistencePort encryptPasswordPersistencePort,
                        IRolePersistencePort rolePersistencePort) {
@@ -95,5 +96,20 @@ public class UserUseCase implements IUserServicePort {
         user.setPassword(encryptPasswordPersistencePort.encryptPassword(user.getPassword()));
 
         return userPersistencePort.saveUser(user);
+    }
+    @Override
+    public void saveCustomer(User user) {
+        validateEmailNotExists(user.getEmail());
+        validateDocumentNotExists(user.getDocument());
+
+        Role role = rolePersistencePort.findByName(Constants.ROLE_CUSTOMER);
+        if (role == null) {
+            throw new RoleNotFoundException();
+        }
+
+        user.setRole(role);
+        user.setPassword(encryptPasswordPersistencePort.encryptPassword(user.getPassword()));
+
+        userPersistencePort.saveUser(user);
     }
 }
