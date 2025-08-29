@@ -1,4 +1,4 @@
-package com.example.foodCourt.infrastructure.security;
+package com.example.foodCourt.infrastructure.input.rest;
 
 import com.example.foodCourt.application.dto.AuthenticationDtoResponse;
 import com.example.foodCourt.application.dto.LoginDto;
