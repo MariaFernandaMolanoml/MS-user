@@ -120,7 +120,7 @@ class UserUseCaseTest {
     void getUser_Success() {
         when(userPersistencePort.findByDocument("123456789")).thenReturn(testUser);
 
-        User user = userUseCase.getUser("123456789");
+        User user = userUseCase.getUserByDocument("123456789");
 
         assertNotNull(user);
         assertEquals("123456789", user.getDocument());
@@ -130,7 +130,7 @@ class UserUseCaseTest {
     void getUser_ShouldThrowUserNotFoundException() {
         when(userPersistencePort.findByDocument("999")).thenReturn(null);
 
-        assertThrows(UserNotFoundException.class, () -> userUseCase.getUser("999"));
+        assertThrows(UserNotFoundException.class, () -> userUseCase.getUserByDocument("999"));
     }
 
     @Test

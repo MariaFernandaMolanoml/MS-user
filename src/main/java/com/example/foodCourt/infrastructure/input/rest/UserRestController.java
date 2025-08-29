@@ -5,6 +5,7 @@ import com.example.foodCourt.application.dto.SaveDtoRequest;
 import com.example.foodCourt.application.dto.UserResponse;
 import com.example.foodCourt.application.handler.IUserHandler;
 import com.example.foodCourt.domain.model.User;
+import com.example.foodCourt.infrastructure.exception.ApiErrorResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,9 +19,17 @@ public class UserRestController {
     private final IUserHandler userHandler;
 
     @PostMapping("/save/owner")
-    public ResponseEntity<String> register(@Valid @RequestBody SaveDtoRequest saveRequest) {
+    public ResponseEntity<ApiErrorResponse> register(@Valid @RequestBody SaveDtoRequest saveRequest) {
         userHandler.saveOwner(saveRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
+
+        ApiErrorResponse response = new ApiErrorResponse(
+                java.time.LocalDateTime.now(),
+                HttpStatus.CREATED.value(),
+                HttpStatus.CREATED.getReasonPhrase(),
+                "User created successfully"
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/{document}")

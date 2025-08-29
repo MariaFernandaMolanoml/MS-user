@@ -1,9 +1,11 @@
 package com.example.foodCourt.infrastructure.configuration;
 
+import com.example.foodCourt.domain.api.IAuthServicePort;
 import com.example.foodCourt.domain.api.IUserServicePort;
 import com.example.foodCourt.domain.spi.IEncryptPasswordPersistencePort;
 import com.example.foodCourt.domain.spi.IRolePersistencePort;
 import com.example.foodCourt.domain.spi.IUserPersistencePort;
+import com.example.foodCourt.domain.usecase.AuthUseCase;
 import com.example.foodCourt.domain.usecase.UserUseCase;
 import com.example.foodCourt.infrastructure.output.jpa.adapter.RoleJpaAdapter;
 import com.example.foodCourt.infrastructure.output.jpa.adapter.UserJpaAdapter;
@@ -14,6 +16,8 @@ import com.example.foodCourt.infrastructure.output.jpa.repository.IUserRepositor
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @RequiredArgsConstructor
@@ -23,7 +27,7 @@ public class BeanConfiguration {
     private final UserEntityMapper userEntityMapper;
     private final IRoleRepository roleRepository;
     private final RoleEntityMapper roleEntityMapper;
-    private final IEncryptPasswordPersistencePort encryptPasswordPersistencePort; // inyectado desde @Component
+    private final IEncryptPasswordPersistencePort encryptPasswordPersistencePort;
 
     @Bean
     public IUserPersistencePort userPersistencePort() {
@@ -37,8 +41,16 @@ public class BeanConfiguration {
 
     @Bean
     public IUserServicePort userServicePort() {
-        // ahora pasamos el puerto de encriptación al UseCase
         return new UserUseCase(userPersistencePort(), encryptPasswordPersistencePort, rolePersistencePort());
     }
-}
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public IAuthServicePort authServicePort() {
+        return new AuthUseCase(userPersistencePort(), passwordEncoder());
+    }
+}
