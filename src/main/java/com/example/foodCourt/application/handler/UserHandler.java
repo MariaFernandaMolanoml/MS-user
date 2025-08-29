@@ -19,7 +19,6 @@ public class UserHandler implements IUserHandler{
     private final IUserServicePort userServicePort;
     private final SaveDtoRequestMapper saveDtoRequestMapper;
     private final UserResponseMapper userResponseMapper;
-    private final UserUseCase userUseCase;
 
     @Override
     public void saveOwner(SaveDtoRequest saveDtoRequest) {
@@ -36,4 +35,11 @@ public class UserHandler implements IUserHandler{
         User user = saveDtoRequestMapper.toEntity(saveDtoRequest);
         userServicePort.saveEmployee(user);
     }
+
+    @Override
+    public void saveCustomer(SaveDtoRequest saveRequest) {
+        User user=saveDtoRequestMapper.toEntity(saveRequest);
+        userServicePort.saveCustomer(user);
+    }
+
 }

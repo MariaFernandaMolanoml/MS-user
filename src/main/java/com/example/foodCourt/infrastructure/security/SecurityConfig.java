@@ -22,7 +22,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/users/*").permitAll()
+                        .requestMatchers("/auth/login", "/users/*","/users/save/customer").permitAll()
                         .requestMatchers("/users/save/owner").hasAuthority(ROLE_ADMIN)
                         .requestMatchers("/users/save/employee").hasAuthority(ROLE_OWNER)
                         .anyRequest().authenticated()

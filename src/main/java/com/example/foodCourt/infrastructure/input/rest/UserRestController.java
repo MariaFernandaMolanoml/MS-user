@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.Map;
+
 @RestController
 @RequestMapping("users")
 @RequiredArgsConstructor
@@ -45,6 +48,19 @@ public class UserRestController {
                 HttpStatus.CREATED.value(),
                 HttpStatus.CREATED.getReasonPhrase(),
                 "Employee created successfully"
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+    @PostMapping("/save/customer")
+    public ResponseEntity<Object> registerCustomer(@Valid @RequestBody SaveDtoRequest saveRequest) {
+        userHandler.saveCustomer(saveRequest);
+
+        ApiResponse response = new ApiResponse(
+                java.time.LocalDateTime.now(),
+                HttpStatus.CREATED.value(),
+                HttpStatus.CREATED.getReasonPhrase(),
+                "Client created successfully"
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
