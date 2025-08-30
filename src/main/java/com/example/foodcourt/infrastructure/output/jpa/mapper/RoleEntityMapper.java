@@ -1,0 +1,14 @@
+package com.example.foodcourt.infrastructure.output.jpa.mapper;
+
+import com.example.foodcourt.domain.model.Role;
+import com.example.foodcourt.infrastructure.output.jpa.entity.RoleEntity;
+import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
+
+@Mapper(componentModel = "spring",
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        unmappedSourcePolicy = ReportingPolicy.IGNORE)
+public interface RoleEntityMapper {
+    Role toRole(RoleEntity roleEntity);
+    RoleEntity toEntity(Role role);
+}
